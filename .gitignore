@@ -33,3 +33,6 @@
 
 # Files from build folder
 /build
+
+# The script file
+vscode.sh
