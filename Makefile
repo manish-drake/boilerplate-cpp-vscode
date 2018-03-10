@@ -23,7 +23,7 @@ OBJECTS = 	$(addprefix $(BUILDIR)/, \
 all: $(OBJECTS)
 	$(CXX) $(DEBUG) $(OBJECTS) -o $(BUILDIR)/$(TARGET)
 
-$(BUILDIR)/main.o: 
+$(BUILDIR)/main.o: main.cpp
 	$(CXX) $(DEBUG) $(CFLAGS) $(INCLUDE) main.cpp -o $@
 
 clean:
