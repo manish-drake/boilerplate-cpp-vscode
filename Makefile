@@ -8,7 +8,7 @@ TARGET = target
 
 BUILDIR = build
 
-INCLUDE = -I.
+INCLUDE = -I. -I/usr/local/include
 
 SQLITECORE_HEADERS = 
 
@@ -21,10 +21,10 @@ OBJECTS = 	$(addprefix $(BUILDIR)/, \
 			main.o)
 
 all: $(OBJECTS)
-	$(CXX) $(DEBUG) $(OBJECTS) -o $(BUILDIR)/$(TARGET)
+	$(CXX) -Wall $(DEBUG) $(OBJECTS) $(LDFLAGS) -o $(BUILDIR)/$(TARGET)
 
-$(BUILDIR)/main.o: 
-	$(CXX) $(DEBUG) $(CFLAGS) $(INCLUDE) main.cpp -o $@
+$(BUILDIR)/main.o: main.cpp
+	$(CXX) $(CFLAGS) $(DEBUG) $(INCLUDE) main.cpp -o $@
 
 clean:
 	$(RM) $(BUILDIR)/*
