@@ -1,30 +1,93 @@
-CFLAGS = -c -std=c++11
+####### Compiler, tools and options
 
-LDFLAGS = 
+CC            = gcc
+CXX           = g++
+DEFINES       = 
+CFLAGS        = -pipe -g -Wall -W -D_REENTRANT -fPIC $(DEFINES)
+CXXFLAGS      = -pipe -g -MMD -std=gnu++11 -Wall -W -D_REENTRANT -fPIC $(DEFINES)
+INCPATH       = -I.
+VPATH	      = .
+LIBS          = -lreadline
+DEL_FILE      = rm -f
+CHK_DIR_EXISTS= test -d
+MKDIR         = mkdir -p
+COPY          = cp -f
+COPY_FILE     = cp -f
+COPY_DIR      = cp -f -R
+DEBUG         = -g
+DEL_FILE      = rm -f
+SYMLINK       = ln -f -s
+DEL_DIR       = rmdir
+MOVE          = mv -f
+TAR           = tar -cf
+COMPRESS      = gzip -9f
+LINK          = g++
+LFLAGS        = 
+AR            = ar cqs
+RANLIB        = 
+SED           = sed
+STRIP         = strip
 
-DEBUG = -g
+####### Output directory
 
-TARGET = target
+OBJECTS_DIR   = ./build
+####### Files
+SOURCES       = $(wildcard *.cpp)
+SOURCEO       = $(SOURCES:.cpp=.o) 
+OBJECTS       = $(addprefix $(OBJECTS_DIR)/,$(SOURCEO))
+DEPS          = $(OBJECTS:.o=.d)
+DESTDIR       = .
+TARGET        = target
+####### Customized Vars
+INCPATH	     += 
+VPATH        +=	
+LIBS         += 
+SOURCES	     += 
+#########################################
 
-BUILDIR = build
+####### Build rules
+$(OBJECTS_DIR)/%.o:%.c
+	$(CC) -c $(CFLAGS) $(INCPATH) -o $@  $<
 
-INCLUDE = -I. -I/usr/local/include
+$(OBJECTS_DIR)/%.o:%.cpp
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o $@  $<
+#########################################
 
-SQLITECORE_HEADERS = 
+####### Targets
 
-SQLITECORE_SOURCES = 
+first: all
 
-SOURCES = 	main.cpp \
-			$(SQLITECORE_SOURCES) \
+all: $(TARGET)
 
-OBJECTS = 	$(addprefix $(BUILDIR)/, \
-			main.o)
 
-all: $(OBJECTS)
-	$(CXX) -Wall $(DEBUG) $(OBJECTS) $(LDFLAGS) -o $(BUILDIR)/$(TARGET)
+$(TARGET): Makefile  $(OBJECTS_DIR) $(OBJECTS)
+	$(LINK) $(LFLAGS) -o $(DESTDIR)/$(TARGET) $(OBJECTS) $(OBJCOMP) $(LIBS)
 
-$(BUILDIR)/main.o: main.cpp
-	$(CXX) $(CFLAGS) $(DEBUG) $(INCLUDE) main.cpp -o $@
+$(OBJECTS_DIR):
+	$(MKDIR) $(OBJECTS_DIR)
 
-clean:
-	$(RM) $(BUILDIR)/*
+clean: 
+	$(DEL_FILE) $(OBJECTS) $(DEPS) $(DESTDIR)/$(TARGET)
+
+env:
+	@echo CC          : $(CC)
+	@echo CFLAGS      : $(CFLAGS)
+	@echo CXX         : $(CXX)
+	@echo CXXFLAGS    : $(CXXFLAGS)
+	@echo LINK        : $(LINK)
+	@echo LFLAGS      : $(LFLAGS)
+	@echo LIBS        : $(LIBS)
+	@echo INCPATH     : $(INCPATH)
+	@echo VPATH       : $(VPATH)
+	@echo SOURCES     : $(SOURCES)
+	@echo SOURCEO     : $(SOURCEO)
+	@echo OBJECTS_DIR : $(OBJECTS_DIR)
+	@echo OBJECTS     : $(OBJECTS)
+	@echo DEPS     	  : $(DEPS)
+	@echo DESTDIR     : $(DESTDIR)
+	@echo TARGET      : $(TARGET)
+	@echo OBJCOMP     : $(OBJCOMP)
+	@echo Compile     : $(CXX) -c $(CXXFLAGS) $(INCPATH) -o
+	@echo Link        : $(LINK) $(LFLAGS) -o $(DESTDIR)/$(TARGET) $(OBJECTS) $(OBJCOMP) $(LIBS)
+	@echo Clean       : $(DEL_FILE) $(OBJECTS) $(DEPS) $(DESTDIR)/$(TARGET)
+
