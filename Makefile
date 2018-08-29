@@ -91,3 +91,4 @@ env:
 	@echo Link        : $(LINK) $(LFLAGS) -o $(DESTDIR)/$(TARGET) $(OBJECTS) $(OBJCOMP) $(LIBS)
 	@echo Clean       : $(DEL_FILE) $(OBJECTS) $(DEPS) $(DESTDIR)/$(TARGET)
 
+-include $(DEPS)
